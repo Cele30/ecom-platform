@@ -1,12 +1,14 @@
 import React from 'react'
 import { FaSearch, FaThLarge, FaShoppingCart } from 'react-icons/fa'
+import NavigationItems from './NavigationItems/NavigationItems'
 
 function Toolbar({ openSideDrawer }) {
   return (
     <div className='container mx-auto px-4'>
       <div className='flex flex-col py-6 text-2xl text-gray-700'>
         <div className='flex justify-between items-center'>
-          <FaThLarge onClick={openSideDrawer} />
+          <NavigationItems />
+          <FaThLarge onClick={openSideDrawer} className='lg:hidden' />
           <h1>Shop</h1>
           <FaShoppingCart />
         </div>

@@ -6,8 +6,8 @@ function Footer() {
   return (
     <>
       <div className='py-16 bg-yellow-500 mt-4'>
-        <div className='flex flex-col items-center justify-between w-5/6 mx-auto'>
-          <div className='text-center'>
+        <div className='flex flex-col items-center justify-between w-5/6 mx-auto lg:flex-row'>
+          <div className='text-center lg:text-left'>
             <h4 className='font-bold text-white text-xl pb-8'>Contact</h4>
             <ul>
               <li className='pb-2 block'>
@@ -22,9 +22,9 @@ function Footer() {
             </ul>
           </div>
 
-          <div className='py-16 text-center'>
+          <div className='py-16 lg:py-0'>
             <Link to='/' className='text-white text-4xl uppercase'>E-commerce</Link>
-            <div className='flex items-center justify-center pt-5'>
+            <div className='flex items-center justify-center pt-5 lg:justify-start'>
               <Link to='/'>
                 <div className='bg-white rounded-full px-2 py-2 flex items-center mr-5'>
                   <FaFacebookF />

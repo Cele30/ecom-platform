@@ -1,16 +1,14 @@
 import React from 'react'
 import Filters from '../components/Filters/Filters'
-import Footer from '../components/Footer/Footer'
-import Toolbar from '../components/Navigation/Toolbar'
 import ProductList from '../components/Product/ProductList'
+import Subscription from '../components/Subscription/Subscription'
 
 function Shop() {
   return (
     <div>
-      <Toolbar />
       <Filters />
       <ProductList />
-      <Footer />
+      <Subscription />
     </div>
   )
 }
