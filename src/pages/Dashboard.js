@@ -8,7 +8,6 @@ function Dashboard() {
       <ProductCarousel />
       <Featured />
       <Brands />
-
     </div>
   )
 }

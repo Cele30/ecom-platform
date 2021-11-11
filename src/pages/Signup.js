@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 function Signup() {
   return (
     <div className='container mx-auto px-4'>
-      <div className='py-16'>
+      <div className='py-16 md:py-20 lg-py-24 sm:w-2/3 md:w-3/5 lg:w-1/2 xl:w-2/5  mx-auto'>
         <form className='border border-gray-200 rounded shadow py-8 px-10' method='POST'>
           <label className='block pb-3'>Username</label>
           <input type='text' placeholder='Enter your username' className='mb-6 border border-1 border-gray-300 px-3 py-3 w-full rounded' />

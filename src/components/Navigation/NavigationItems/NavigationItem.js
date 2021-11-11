@@ -1,12 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
-function NavigationItem({ link, exact, children }) {
+function NavigationItem({ link, children }) {
   return (
-    <li className='w-full block mb-8 text-sm'>
-      <Link to={link} exact={exact} className='flex items-center gap-4'>{children}</Link>
+    <li className='text-sm inline-block px-2'>
+      <NavLink to={link}
+        className={navData => navData.isActive ? 'text-black flex items-center gap-4' : 'text-white flex items-center gap-4 sm:text-gray-500'}
+      >
+        {children}
+      </NavLink>
     </li>
   )
 }
 
 export default NavigationItem
+
+

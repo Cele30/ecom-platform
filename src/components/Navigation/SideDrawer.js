@@ -9,7 +9,7 @@ function SideDrawer({ isSideDrawerOpen, closeSideDrawer }) {
   return (
     <>
       <Backdrop show={isSideDrawerOpen} close={closeSideDrawer} />
-      <div className={`bg-yellow-500 transform  transition-all duration-300 ${isSideDrawerOpen ? 'translate-x-0' : '-translate-x-full'} z-20 w-2/3 h-full fixed left-0 top-0 flex flex-col justify-between p-4 text-md text-white`}>
+      <div className={`sm:hidden bg-yellow-500 transform  transition-all duration-300 ${isSideDrawerOpen ? 'translate-x-0' : '-translate-x-full'} z-20 w-2/3 h-full fixed left-0 top-0 flex flex-col justify-between p-4 text-md text-white`}>
         <div className='flex items-center gap-2'>
           <img src={defaultAvatar} alt='avatar' className='w-10 h-10 rounded-full' />
           <p>Cele cele</p>

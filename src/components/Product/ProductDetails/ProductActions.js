@@ -22,7 +22,7 @@ function ProductActions() {
           <p>Quantinty</p>
         </div>
         <div className='w-2/3 flex'>
-          <input type='number' className='w-16 text-center px-2 py-2 border border-1 border-gray-300' defaultValue={1} min='1' />
+          <input type='number' className='w-16 text-center px-2 py-2 border border-1 border-gray-300 appearance-none  ' defaultValue={1} min='1' />
 
           <div className='flex flex-col'>
             <span className='px-1 bg-white border border-1-0 border-gray-300 flex-1 rounede-tr cursor-pointer flex items-center'>

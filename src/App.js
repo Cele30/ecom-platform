@@ -8,6 +8,8 @@ import Signup from './pages/Signup'
 import Toolbar from './components/Navigation/Toolbar'
 import SideDrawer from './components/Navigation/SideDrawer'
 import Footer from './components/Footer/Footer'
+import Contact from './pages/Contact'
+import About from './pages/About'
 
 function App() {
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false)
@@ -25,6 +27,8 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/shop' element={<Shop />} />
         <Route path='/shop/:id' element={<ProductDetails />} />
+        <Route path='/contact' element={<Contact />} />
+        <Route path='/about' element={<About />} />
       </Routes>
       <Footer />
     </>

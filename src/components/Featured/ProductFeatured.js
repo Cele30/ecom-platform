@@ -1,21 +1,28 @@
 import React from 'react'
+import { FaSearch, FaShoppingBag } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
 function ProductFeatured() {
   return (
-    <li className="w-1/2 mb-4 inline-block bg-white px-2 pt-6 border-r-2 border-l-2 shadow-lg w-full">
-      <Link to='product'>
-        <img className='h-28 w-full object-cover' src='https://cdn2.jomashop.com/media/catalog/product/cache/df24c858758eb768757877f23cd17493/c/o/corum-admiral-cup-chronograph-automatic-white-dial-mens-watch-a75304234-a75304234.jpg?width=300&height=300' alt='watc' />
-        <div className="p-4">
-          <h1 className="text-gray-900 font-bold text-2xl">Backpack</h1>
-          <p className="mt-2 text-gray-600 text-sm">Lorem ipsum dolor sit amet consect</p>
-          <div className="flex items-center justify-between mt-3">
-            <h1 className="text-gray-700 font-bold text-xl">$150</h1>
-            <h1 className='line-through text-gray-500 text-md'>$220</h1>
+    <div className='w-full'>
+      <div className='flex flex-col items-center border border-gray-dark rounde'>
+        <div className='w-full relative group'>
+          <div className='w-full h-52 bg-center bg-no-repeat bg-contain bg-pink-50' style={{ backgroundImage: 'url(/assets/images/backpack-03-1.png)' }}>
+            <span className='absolute top-0 right-0 bg-white px-5 py-1 mt-4 mr-4 rounded-full uppercase font-bold text-green-500'>New</span>
+          </div>
+
+          <div className='absolute inset-0 opacity-0 group-hover:opacity-100 flex justify-center items-center gap-4 bg-black bg-opacity-70'>
+            <button className='bg-white rounded-full p-3 flex items-center'><FaShoppingBag /></button>
+            <Link to='product/1' className='bg-white rounded-full p-3 flex items-center'><FaSearch /></Link>
           </div>
         </div>
-      </Link>
-    </li>
+
+        <Link to='product/1' className='w-full px-6 py-6 flex items-center justify-between'>
+          <h3 className='text-xl text-gray-600'>Cat eye</h3>
+          <span className='font-bold text-xl block pt-1 text-yellow-500'>$75.0</span>
+        </Link>
+      </div>
+    </div >
   )
 }
 

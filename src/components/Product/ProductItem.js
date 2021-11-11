@@ -6,8 +6,7 @@ function ProductItem() {
     <div className='w-full'>
       <div className='flex flex-col items-center border border-gray-dark rounde'>
         <div className='w-full relative'>
-          <div className='w-full h-68'>
-            <img src='/assets/images/sunglass.jpg' alt='product' />
+          <div className='w-full h-52 bg-center bg-no-repeat bg-contain bg-pink-50' style={{ backgroundImage: 'url(/assets/images/backpack-03-1.png)' }}>
             <span className='absolute top-0 right-0 bg-white px-5 py-1 mt-4 mr-4 rounded-full uppercase font-bold text-green-500'>New</span>
           </div>
         </div>

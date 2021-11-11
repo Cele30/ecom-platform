@@ -1,14 +1,15 @@
 import React from 'react'
 import NavigationItem from './NavigationItem'
-import { FaShoppingCart, FaBookOpen, FaClipboardList } from 'react-icons/fa'
+import { FaShoppingCart, FaBookOpen, FaClipboardList, FaHome } from 'react-icons/fa'
 
 function NavigationItems() {
   return (
-    <ul className='flex flex-col list-none lg:flex-row items-center'>
-      <NavigationItem link='/' exact='true'><FaBookOpen /> Home</NavigationItem>
-      <NavigationItem link='/shop' exact='true'><FaBookOpen /> Shop</NavigationItem>
-      <NavigationItem link='/cart'><FaShoppingCart /> Your Cart</NavigationItem>
-      <NavigationItem link='/orders'><FaClipboardList /> Order History</NavigationItem>
+    <ul className='mr-6 flex flex-col gap-6 sm:flex-row sm:items-center'>
+      <NavigationItem link='/'><FaHome className='sm:hidden' /> Home</NavigationItem>
+      <NavigationItem link='/about'><FaBookOpen className='sm:hidden' /> About</NavigationItem>
+      <NavigationItem link='/shop'><FaBookOpen className='sm:hidden' /> Shop</NavigationItem>
+      <NavigationItem link='/contact'><FaShoppingCart className='sm:hidden' /> Contact</NavigationItem>
+      <NavigationItem link='/orders'><FaClipboardList className='sm:hidden' /> Orders</NavigationItem>
     </ul>
   )
 }

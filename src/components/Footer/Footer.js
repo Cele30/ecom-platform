@@ -43,8 +43,19 @@ function Footer() {
             </div>
           </div>
 
-          <div className='text-center'>
+          <div className='text-center lg:text-left'>
             <h4 className='font-bold text-white text-xl pb-8'>Link</h4>
+            <ul>
+              <li className='pb-2 block'>
+                <p className='text-white'>Shop</p>
+              </li>
+              <li className='pb-2 block'>
+                <p className='text-white'>Contact us</p>
+              </li>
+              <li className='pb-2 block'>
+                <p className='text-white'>Terms & Conditions</p>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

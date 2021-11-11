@@ -7,11 +7,15 @@ import ProductInfo from './ProductInfo'
 function ProductDetails() {
   return (
     <div className='container mx-auto px-4'>
-      <div className='pt-16 pb-24 flex flex-col justify-between'>
+      <div className='pt-16 pb-24 flex flex-col justify-between lg:flex-row'>
+
         <ProductImages />
-        <ProductInfo />
-        <ProductActions />
-        <ProductDescription />
+
+        <div className='lg:w-1/2 pt-8 lg:pt-0 px-5'>
+          <ProductInfo />
+          <ProductActions />
+          <ProductDescription />
+        </div>
       </div>
     </div>
   )
