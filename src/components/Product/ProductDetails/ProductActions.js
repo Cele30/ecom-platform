@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaAngleUp, FaAngleDown } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
 function ProductActions() {
+  const [quantnty, setQuantity] = useState(1)
   return (
     <div className='flex flex-col jusitfy-between'>
       <div className='flex jusitfy-between pb-4'>
@@ -22,13 +23,13 @@ function ProductActions() {
           <p>Quantinty</p>
         </div>
         <div className='w-2/3 flex'>
-          <input type='number' className='w-16 text-center px-2 py-2 border border-1 border-gray-300 appearance-none  ' defaultValue={1} min='1' />
+          <input type='number' className='w-16 text-center px-2 py-2 border border-1 border-gray-300 appearance-none' value={quantnty} onChange={(event) => setQuantity(Number.parseInt(event.target.value))} min='1' />
 
           <div className='flex flex-col'>
-            <span className='px-1 bg-white border border-1-0 border-gray-300 flex-1 rounede-tr cursor-pointer flex items-center'>
+            <span className='px-1 bg-white border border-1-0 border-gray-300 flex-1 rounede-tr cursor-pointer flex items-center' onClick={() => setQuantity(quantnty + 1)}>
               <FaAngleUp className='text-sm pointer-events-none text-yellow-500' />
             </span>
-            <span className='px-1 bg-white border border-1-0 border-gray-300 flex-1 rounede-tr cursor-pointer flex items-center'>
+            <span className='px-1 bg-white border border-1-0 border-gray-300 flex-1 rounede-tr cursor-pointer flex items-center' onClick={() => setQuantity(quantnty - 1)}>
               <FaAngleDown className='text-sm pointer-events-none text-yellow-500' />
             </span>
           </div>
@@ -37,7 +38,7 @@ function ProductActions() {
 
       <div className='flex items-center'>
         <button className='mr-4 inline-block border border-yellow-500 border-1 text-yellow-500 px-7 py-3 rounded uppercase text-center font-semibold'>Add to cart</button>
-        <Link to='checkout' className='bg-yellow-500 text-white px-7 py-3 rounded inline-block uppercase text-center font-semibold'>Buy now</Link>
+        <Link to='/cart/checkout' className='bg-yellow-500 text-white px-7 py-3 rounded inline-block uppercase text-center font-semibold'>Buy now</Link>
       </div>
     </div>
   )

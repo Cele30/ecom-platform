@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaSearch, FaThLarge, FaShoppingCart, FaShoppingBag, FaUserAlt } from 'react-icons/fa'
+import { FaSearch, FaThLarge, FaShoppingBag } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import NavigationItems from './NavigationItems/NavigationItems'
 

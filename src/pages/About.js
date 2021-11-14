@@ -1,4 +1,5 @@
 import React from 'react'
+import { FaPlayCircle } from 'react-icons/fa'
 
 function About() {
   return (
@@ -35,7 +36,17 @@ function About() {
           </div>
         </div>
       </div>
-    </div>
+
+      <div className='mb-16 sm:mb-20 lg:mb-24 text-center'>
+        <div className='w-full sm:w-3/4 mx-auto'>
+          <h3 className='mx-auto text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center sm:leading-tight'>Online shopping is a fashion and creativity company</h3>
+          <p className='mx-auto md:text-lg mt-8 sm:mt-10 mb-12 lg:pb-5'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <div className='relative bg-no-repeat bg-cover bg-center h-64 sm:h-80 md:h-96 mx-auto flex items-center justify-center cursor-pointer' style={{ backgroundImage: 'url(/assets/images/creativity.jpg)' }}>
+            <FaPlayCircle className='text-white opacity-75 text-9xl z-0' />
+          </div>
+        </div>
+      </div>
+    </div >
   )
 }
 

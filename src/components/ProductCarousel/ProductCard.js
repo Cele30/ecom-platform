@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import watchImg from '../../assets/images/watch.png'
 
 function ProductCard() {
   return (
