@@ -13,11 +13,19 @@ import About from './pages/About'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 
+import useAuthListener from './hooks/useAuthListener'
+import ProtectedRoute from './components/ProtectedRoute'
+import { useSelector } from 'react-redux'
+
 function App() {
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false)
+  const { currentUser, initializeApp } = useSelector(state => state.auth)
+  useAuthListener()
 
   const openSideDrawer = () => setIsSideDrawerOpen(true)
   const closeSideDrawer = () => setIsSideDrawerOpen(false)
+
+  if (!initializeApp) return <p className='flex items-center h-screen justify-center text-4xl'>Loading...</p>
 
   return (
     <>
@@ -27,11 +35,19 @@ function App() {
         <Route path='/' element={<Dashboard />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/shop' element={<Shop />} />
+        <Route path='/shop/:category' element={<Shop />} />
         <Route path='/product/:id' element={<ProductDetails />} />
 
         <Route path='/cart' element={<Cart />} />
-        <Route path='/cart/checkout' element={<Checkout />} />
+
+        <Route
+          path='/cart/checkout'
+          element={
+            <ProtectedRoute isAuth={currentUser}>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path='/contact' element={<Contact />} />
         <Route path='/about' element={<About />} />

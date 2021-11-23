@@ -5,7 +5,7 @@ import './index.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import App from './App';
-import { store } from './app/store';
+import { store } from './store/index';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom'
