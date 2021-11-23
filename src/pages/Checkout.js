@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaAngleLeft, FaTrash } from 'react-icons/fa'
 
 function Checkout() {
+  const [paymentMethod, setPaymentMethod] = useState('cash')
+
+  const handleChange = (event) => setPaymentMethod(event.target.name)
+
   return (
     <div className='container mx-auto px-4'>
       <div className='flex flex-col lg:flex-row justify-between items-center md:items-start pt-10 sm:pt-12 pb-16 sm:pb-20 lg:pb-24 px-2'>
@@ -40,33 +44,35 @@ function Checkout() {
             </div>
 
             <h4 className='font-medium text-xl md:text-2xl text-center sm:text-left pt-8'>Payment Method</h4>
-            <div class="pt-4">
-              <div class="flex items-center mr-4 mb-4">
-                <input id="radio2" type="radio" name="radio" class="hidden" checked />
-                <label for="radio2" class="flex items-center cursor-pointer text-md">
-                  <span class="w-6 h-6 inline-block mr-2 rounded-full border border-gray-500 flex-no-shrink"></span>
+            <div className="pt-4">
+              <div className="flex items-center mr-4 mb-4">
+                <input id="radio2" type="radio" name="cash" className="hidden" checked={paymentMethod === 'cash'} onChange={handleChange} />
+                <label htmlFor="radio2" className="flex items-center cursor-pointer text-md">
+                  <span className="w-6 h-6 inline-block mr-2 rounded-full border border-gray-500 flex-no-shrink"></span>
                   Cash on Delivery
                 </label>
               </div>
-              <div class="flex items-center mr-4 mb-4">
-                <input id="radio1" type="radio" name="radio" class="hidden" />
-                <label for="radio1" class="flex items-center cursor-pointer text-md">
-                  <span class="w-6 h-6 inline-block mr-2 rounded-full border border-gray-500 flex-no-shrink"></span>
+              <div className="flex items-center mr-4 mb-4">
+                <input id="radio1" type="radio" name="card" className="hidden" checked={paymentMethod === 'card'} onChange={handleChange} />
+                <label htmlFor="radio1" className="flex items-center cursor-pointer text-md">
+                  <span className="w-6 h-6 inline-block mr-2 rounded-full border border-gray-500 flex-no-shrink"></span>
                   Debit/Credit Card
                 </label>
               </div>
             </div>
 
-            <div className='pt-4 md:pt-5'>
-              <form>
-                <input type='text' placeholder='Enter Card Number' className='mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3' />
+            {paymentMethod === 'card' &&
+              <div className='pt-4 md:pt-5'>
+                <form>
+                  <input type='text' placeholder='Enter Card Number' className='mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3' />
 
-                <div className='flex justify-between'>
-                  <input type='month' placeholder='Valid Date' className='mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3' />
-                  <input type='text' placeholder='CVV' className='mb-4 sm:mb-5 w-full border border-gray-300 rounded px-6 py-3' />
-                </div>
-              </form>
-            </div>
+                  <div className='flex justify-between'>
+                    <input type='month' placeholder='Valid Date' className='mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3' />
+                    <input type='text' placeholder='CVV' className='mb-4 sm:mb-5 w-full border border-gray-300 rounded px-6 py-3' />
+                  </div>
+                </form>
+              </div>
+            }
 
             <div className='flex flex-col sm:flex-row justify-between items-center pt-8 sm:pt-8'>
               <Link to='/cart' className='flex items-center mb-3 sm:mb-0 text-sm'><FaAngleLeft className='text-lg pr-2' />Return to cart</Link>

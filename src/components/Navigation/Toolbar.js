@@ -1,9 +1,21 @@
-import React from 'react'
-import { FaSearch, FaThLarge, FaShoppingBag } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useEffect } from 'react'
+import { FaSearch, FaThLarge, FaShoppingBag, FaUserAlt, FaAngleDown } from 'react-icons/fa'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
 import NavigationItems from './NavigationItems/NavigationItems'
+import { signOut, getAuth } from 'firebase/auth'
+import { retrieveProductCategories } from '../../store/products/products.slice'
 
 function Toolbar({ openSideDrawer }) {
+  const { currentUser } = useSelector(state => state.auth)
+  const { productCategories } = useSelector(state => state.products)
+  const dispatch = useDispatch()
+  const { pathname } = useLocation()
+  const auth = getAuth()
+
+  const initFetch = useCallback(() => { dispatch(retrieveProductCategories()) }, [dispatch])
+  useEffect(() => initFetch(), [initFetch])
+
   return (
     <header className='w-full bg-white md:mt-4'>
       <div className='container mx-auto px-4 h-full'>
@@ -18,7 +30,7 @@ function Toolbar({ openSideDrawer }) {
 
 
           <nav className='mr-6 flex-grow hidden sm:block'>
-            <NavigationItems />
+            <NavigationItems productCategories={productCategories} />
           </nav>
 
 
@@ -36,16 +48,38 @@ function Toolbar({ openSideDrawer }) {
 
           <Link to='/cart' className='py-3 px-4 hover:bg-gray-200 lg:mr-8'><FaShoppingBag /></Link>
 
+          {currentUser ? (
+            <div className='group'>
+              <div className='relative flex items-center gap-2 cursor-pointer hover:bg-gray-200 p-2 '>
+                <FaUserAlt />
+                <p>{currentUser.username}</p>
+                <FaAngleDown />
+              </div>
 
-          <div className='flex items-center justify-between gap-8 hidden lg:flex '>
-            <div className='flex items-center gap-4'>
-              <Link to='signup' className='bg-black text-white  text-sm font-semibold inline-block px-4 py-1.5'>Sign Up</Link>
-              <Link to='login' className='text-gray-500 border border-gray-300 text-sm inline-block px-4 py-1.5 hover:bg-gray-100'>Sign In</Link>
+              <div className="hidden group-hover:block absolute bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow w-24">
+                <ul className="py-1">
+                  <li>
+                    <Link to={`profile/${currentUser.username}`} className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Profile</Link>
+                  </li>
+                  <li>
+                    <button className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 w-full text-left" onClick={() => signOut(auth)}>Sign out</button>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className='flex items-center justify-between gap-8 hidden lg:flex '>
+              <div className='flex items-center gap-4'>
+                {pathname !== '/signup' &&
+                  <Link to='signup' className='bg-black text-white  text-sm font-semibold inline-block px-4 py-1.5'>Sign Up</Link>}
+                {pathname !== '/login' &&
+                  <Link to='login' className='text-gray-500 border border-gray-300 text-sm inline-block px-4 py-1.5 hover:bg-gray-100'>Sign In</Link>}
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-    </header>
+      </div >
+    </header >
   )
 }
 

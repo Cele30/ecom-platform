@@ -1,8 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Product from './ProductFeatured'
+import useFeaturedProducts from '../../hooks/useFeaturedProducts'
+import ProductFeatured from './ProductFeatured'
 
 function Featured() {
+  const { featuredProducts, loading, error } = useFeaturedProducts()
+
   return (
     <div className='flex flex-col py-6 mt-4'>
       <div className='mb-8 mx-auto text-center'>
@@ -11,10 +14,19 @@ function Featured() {
       </div>
 
       <div className='grid grid-cols-1 lg:grid-cols-4 gap-10'>
-        <Product />
-        <Product />
-        <Product />
-        <Product />
+        {loading && (
+          <div>
+            <h3 className='text-center'>Loading Product...</h3>
+          </div>
+        )}
+
+        {error && <p>{error}</p>}
+
+        {(featuredProducts && !loading) && (
+          featuredProducts.map((product) => (
+            <ProductFeatured key={product.productId} {...product} />
+          ))
+        )}
       </div>
     </div>
   )
