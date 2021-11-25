@@ -22,6 +22,8 @@ module.exports = {
   variants: {
     extend: {
       display: ["group-hover"],
+      inset: ['hover', 'focus', 'group-hover'],
+      translate: ['group-hover'],
     },
   },
   plugins: [],

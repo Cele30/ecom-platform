@@ -59,3 +59,7 @@ input[type='radio']:checked + label span {
 input[type='radio']:checked + label {
   color: #3490dc;
 }
+
+.Toastify__toast-container--top-right {
+  top: 5rem;
+}

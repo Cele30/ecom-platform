@@ -24,7 +24,7 @@ function Featured() {
 
         {(featuredProducts && !loading) && (
           featuredProducts.map((product) => (
-            <ProductFeatured key={product.productId} {...product} />
+            <ProductFeatured key={product.productId} product={product} />
           ))
         )}
       </div>
