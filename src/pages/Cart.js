@@ -1,24 +1,70 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-// import { FaPlus, FaMinus, FaTimes } from 'react-icons/fa'
 import CartItems from '../components/CartItems/CartItems';
+import Modal from '../shared/components/Modal';
 import { clearCart } from '../store/cart/cart.slice';
+import { displayMoney, calculateTotal } from '../utils/helpers';
 
 function Cart() {
-  const [couponCode, setCouponCode] = useState(false);
-  const { items } = useSelector(state => state.cart);
+  const { items, user } = useSelector(state => ({
+    items: state.cart.items,
+    user: state.auth.currentUser,
+  }));
   const dispatch = useDispatch();
   const inputRef = useRef();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const subTotal = items.reduce(
-    (acc, cur) => acc + cur.price * cur.quantity,
-    0
-  );
+  const [couponCode, setCouponCode] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  const prices = items.map(product => product.price * product.quantity);
+
+  const handleProceedCheckout = () => {
+    if (items.length !== 0 && user) {
+      navigate('checkout');
+    } else {
+      setOpenModal(true);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4">
+      {openModal && (
+        <Modal
+          isOpen={openModal}
+          width={500}
+          renderContent={modal => (
+            <>
+              <p className="pb-8 text-xl text-medium">
+                You must sign in to continue checking out
+              </p>
+              <div className="flex items-center gap-2">
+                <button
+                  className="border border-yellow-500 px-4 py-2"
+                  onClick={() => {
+                    setOpenModal(false);
+                    // modal.close();
+                  }}
+                >
+                  Continue shopping
+                </button>
+                <button
+                  onClick={() =>
+                    navigate('/login', { state: { from: pathname } })
+                  }
+                  className="bg-yellow-500 text-white px-4 py-2 "
+                >
+                  Sign in to chekout
+                </button>
+              </div>
+            </>
+          )}
+        />
+      )}
+
       <div className="flex flex-col lg:flex-row justify-between pb-16 sm:pb-20 lg:pb-24 pt-10 sm:pt-12">
         <div className="lg:w-3/5 overflow-y-scroll px-2 h-464">
           <div className="flex items-center justify-between">
@@ -33,6 +79,12 @@ function Cart() {
               Clear Cart
             </button>
           </div>
+
+          {items.length <= 0 && (
+            <div className="flex items-center justify-center flex-1 h-1/2">
+              <h5 className="text-gray-500">Your basket is empty</h5>
+            </div>
+          )}
 
           <CartItems cartItems={items} />
         </div>
@@ -72,30 +124,33 @@ function Cart() {
               <p className="pt-1 pb-2">Cart Total</p>
               <div className="flex justify-between border-b border-gray-200 pb-1">
                 <span>Subtotal</span>
-                <span>${subTotal}</span>
+                <span>{displayMoney(calculateTotal(prices))}</span>
               </div>
 
               {couponCode && (
                 <div className="flex justify-between border-b border-gray-200 pb-1 pt-2">
                   <span>Coupon applied</span>
-                  <span>-${subTotal * 0.2}</span>
+                  <span>-{displayMoney(calculateTotal(prices) * 0.2)}</span>
                 </div>
               )}
 
               <div className="flex justify-between pt-3">
                 <span>Total</span>
                 <span>
-                  ${couponCode ? subTotal - subTotal * 0.2 : subTotal}
+                  {couponCode
+                    ? displayMoney(calculateTotal(prices, true))
+                    : displayMoney(calculateTotal(prices))}
                 </span>
               </div>
             </div>
 
-            <Link
-              to="checkout"
-              className="w-full bg-yellow-500 text-white px-7 py-3 rounded inline-block uppercase text-center font-semibold"
+            <button
+              className="w-full bg-yellow-500 text-white px-7 py-3 rounded inline-block uppercase text-center font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={items.length === 0}
+              onClick={handleProceedCheckout}
             >
               Proceed to chekout
-            </Link>
+            </button>
           </div>
         </div>
       </div>

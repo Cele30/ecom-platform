@@ -28,12 +28,12 @@ function App() {
   const openSideDrawer = () => setIsSideDrawerOpen(true);
   const closeSideDrawer = () => setIsSideDrawerOpen(false);
 
-  if (!initializeApp)
-    return (
-      <p className="flex items-center h-screen justify-center text-4xl">
-        Loading...
-      </p>
-    );
+  // if (!initializeApp)
+  //   return (
+  //     <p className="flex items-center h-screen justify-center text-4xl">
+  //       Loading...
+  //     </p>
+  //   );
 
   return (
     <>

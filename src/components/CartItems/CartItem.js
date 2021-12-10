@@ -1,12 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FaPlus, FaMinus, FaTimes } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaPlus, FaMinus, FaTimes } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 import {
   addQtyToItem,
   minusQtyFromItem,
   removeFromCart,
-} from "../../store/cart/cart.slice";
+} from '../../store/cart/cart.slice';
+import { displayMoney } from '../../utils/helpers';
 
 function CartItem({ item }) {
   const dispatch = useDispatch();
@@ -36,8 +37,8 @@ function CartItem({ item }) {
         <div className="w-20 h-20 mx-auto">
           <img
             src={`/assets/images/products/${item.name.replaceAll(
-              " ",
-              ""
+              ' ',
+              ''
             )}/image-1.png`}
             alt="product"
             className="w-full h-full object-contain"
@@ -65,9 +66,12 @@ function CartItem({ item }) {
             </div>
           </div>
         </div>
-        <div className="text-center text-xl">${item.price * item.quantity}</div>
+        <div className="text-center text-xl">
+          {displayMoney(item.price * item.quantity)}
+        </div>
         <button
           className="ml-auto border p-4 text-gray-700 hover:bg-gray-200"
+          type="button"
           onClick={() => dispatch(removeFromCart(item.productId))}
         >
           <FaTimes />

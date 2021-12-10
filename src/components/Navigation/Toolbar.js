@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   FaSearch,
   FaThLarge,
@@ -10,7 +10,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import NavigationItems from './NavigationItems/NavigationItems';
 import { signOut, getAuth } from 'firebase/auth';
-import { retrieveProductCategories } from '../../store/products/products.slice';
+import {
+  retrieveProductCategories,
+  setSearchTerm,
+} from '../../store/products/products.slice';
 
 function Toolbar({ openSideDrawer }) {
   const { currentUser } = useSelector(state => state.auth);
@@ -20,10 +23,18 @@ function Toolbar({ openSideDrawer }) {
   const { pathname } = useLocation();
   const auth = getAuth();
 
+  const [searchInput, setSearchInput] = useState('');
+
   const initFetch = useCallback(() => {
     dispatch(retrieveProductCategories());
   }, [dispatch]);
   useEffect(() => initFetch(), [initFetch]);
+
+  const handleSubmit = event => {
+    console.log(pathname);
+    event.preventDefault();
+    dispatch(setSearchTerm(searchInput));
+  };
 
   return (
     <header className="w-full bg-white md:mt-4">
@@ -47,26 +58,35 @@ function Toolbar({ openSideDrawer }) {
           <nav className="mr-6 flex-grow hidden sm:block">
             <NavigationItems productCategories={productCategories} />
           </nav>
-
-          <div className="flex items-center hidden md:flex">
-            <div className="relative text-gray-600 focus-within:text-gray-400">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-                <button
-                  type="button"
-                  className="p-1 focus:outline-none focus:shadow-outline"
-                >
-                  <FaSearch />
-                </button>
-              </span>
-              <input
-                type="search"
-                className="py-2 text-sm border rounded pl-10 focus:outline-none focus:text-gray-900"
-                placeholder="Search product..."
-                autoComplete="off"
-              />
+          {[
+            '/shop/shoes',
+            '/shop/bags',
+            '/shop/watches',
+            '/shop/clothes',
+          ].indexOf(pathname) + 1 && (
+            <div className="flex items-center hidden md:flex">
+              <div className="relative text-gray-600 focus-within:text-gray-400">
+                <form onSubmit={handleSubmit}>
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                    <button
+                      type="button"
+                      className="p-1 focus:outline-none focus:shadow-outline"
+                    >
+                      <FaSearch />
+                    </button>
+                  </span>
+                  <input
+                    type="search"
+                    className="py-2 text-sm border rounded pl-10 focus:outline-none focus:text-gray-900"
+                    placeholder="Search product..."
+                    autoComplete="off"
+                    value={searchInput}
+                    onChange={event => setSearchInput(event.target.value)}
+                  />
+                </form>
+              </div>
             </div>
-          </div>
-
+          )}
           <Link
             to="/cart"
             className="py-3 px-4 hover:bg-gray-200 lg:mr-8 flex items-center relative"

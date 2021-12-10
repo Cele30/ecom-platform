@@ -46,7 +46,10 @@ function ProductActions({ product }) {
               className="select-none px-1 bg-white border border-1-0 border-gray-300 flex-1 rounede-tr cursor-pointer flex items-center"
               onClick={() => {
                 setQuantity(quantity + 1);
-                dispatch(addQtyToItem({ id: product.productId, quantity: 1 }));
+                isItemInCart(product.productId) &&
+                  dispatch(
+                    addQtyToItem({ id: product.productId, quantity: 1 })
+                  );
               }}
             >
               <FaAngleUp className="select-none text-sm pointer-events-none text-yellow-500" />
@@ -55,9 +58,10 @@ function ProductActions({ product }) {
               className="select-none px-1 bg-white border border-1-0 border-gray-300 flex-1 rounede-tr cursor-pointer flex items-center"
               onClick={() => {
                 setQuantity(quantity - 1);
-                dispatch(
-                  minusQtyFromItem({ id: product.productId, quantity: 1 })
-                );
+                isItemInCart(product.productId) &&
+                  dispatch(
+                    minusQtyFromItem({ id: product.productId, quantity: 1 })
+                  );
               }}
             >
               <FaAngleDown className="select-none text-sm pointer-events-none text-yellow-500" />
