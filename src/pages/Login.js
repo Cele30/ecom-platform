@@ -3,7 +3,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
-  const [values, setValues] = useState({ email: '', password: '' });
+  const [values, setValues] = useState({
+    email: 'test@test.com',
+    password: 'test123',
+  });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { state } = useLocation();

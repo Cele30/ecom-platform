@@ -20,7 +20,9 @@ function Cart() {
   const [couponCode, setCouponCode] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
-  const prices = items.map(product => product.price * product.quantity);
+  const prices = items.map(
+    product => (product.discountPrice || product.price) * product.quantity
+  );
 
   const handleProceedCheckout = () => {
     if (items.length !== 0 && user) {
@@ -39,7 +41,8 @@ function Cart() {
           renderContent={modal => (
             <>
               <p className="pb-8 text-xl text-medium">
-                You must sign in to continue checking out
+                {/* You must sign in to continue checking out */}
+                Мора да бидете најавени за да продолжите кон наплата
               </p>
               <div className="flex items-center gap-2">
                 <button
@@ -49,7 +52,7 @@ function Cart() {
                     // modal.close();
                   }}
                 >
-                  Continue shopping
+                  Затвори
                 </button>
                 <button
                   onClick={() =>
@@ -57,7 +60,7 @@ function Cart() {
                   }
                   className="bg-yellow-500 text-white px-4 py-2 "
                 >
-                  Sign in to chekout
+                  Најави се
                 </button>
               </div>
             </>
@@ -69,20 +72,20 @@ function Cart() {
         <div className="lg:w-3/5 overflow-y-scroll px-2 h-464">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl pb-3 text-center sm:text-left">
-              Cart Items &nbsp;
-              <span className="text-sm">({items.length} items)</span>
+              {/* Cart Items &nbsp; */}
+              Вашата кошничка &nbsp;
+              <span className="text-sm">({items.length} производ/и)</span>
             </h3>
             <button
               className="border border-gray-300 px-2 py-1 cursor-pointer hover:bg-gray-100 text-gray-500"
               onClick={() => dispatch(clearCart())}
-            >
-              Clear Cart
-            </button>
+            ></button>
           </div>
 
           {items.length <= 0 && (
             <div className="flex items-center justify-center flex-1 h-1/2">
-              <h5 className="text-gray-500">Your basket is empty</h5>
+              {/* <h5 className="text-gray-500">Your basket is empty</h5> */}
+              <h5 className="text-gray-500">Вашата кошничка е празна</h5>
             </div>
           )}
 
@@ -92,11 +95,11 @@ function Cart() {
         <div className="sm:w-2/3 md:w-full lg:w-1/3 mx-auto lg:mx-0 mt-16 lg:mt-0">
           <div className="bg-gray-100 shadow py-8 px-8">
             <h3 className="text-2xl pb-2 text-center sm:text-left">
-              Cart Totals
+              Кошничка (Вкупна цена)
             </h3>
 
-            <div className="pt-4">
-              <p className="pt-1 pb-4">Add Coupon</p>
+            {/* <div className="pt-4">
+              <p className="pt-1 pb-4">Внесете купон</p>
               <div className="flex justify-between">
                 <input
                   type="text"
@@ -118,14 +121,14 @@ function Cart() {
                   Apply
                 </button>
               </div>
-            </div>
+            </div> */}
 
             <div className="mb-12 pt-4">
-              <p className="pt-1 pb-2">Cart Total</p>
-              <div className="flex justify-between border-b border-gray-200 pb-1">
+              {/* <p className="pt-1 pb-2">Cart Total</p> */}
+              {/* <div className="flex justify-between border-b border-gray-200 pb-1">
                 <span>Subtotal</span>
                 <span>{displayMoney(calculateTotal(prices))}</span>
-              </div>
+              </div> */}
 
               {couponCode && (
                 <div className="flex justify-between border-b border-gray-200 pb-1 pt-2">
@@ -135,7 +138,7 @@ function Cart() {
               )}
 
               <div className="flex justify-between pt-3">
-                <span>Total</span>
+                <span>Вкупно</span>
                 <span>
                   {couponCode
                     ? displayMoney(calculateTotal(prices, true))
@@ -149,7 +152,8 @@ function Cart() {
               disabled={items.length === 0}
               onClick={handleProceedCheckout}
             >
-              Proceed to chekout
+              {/* Proceed to chekout */}
+              Продолжи кон наплата
             </button>
           </div>
         </div>

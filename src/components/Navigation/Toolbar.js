@@ -56,14 +56,17 @@ function Toolbar({ openSideDrawer }) {
           </div>
 
           <nav className="mr-6 flex-grow hidden sm:block">
-            <NavigationItems productCategories={productCategories} />
+            <NavigationItems
+              productCategories={productCategories}
+              currentUser={currentUser}
+            />
           </nav>
           {[
             '/shop/shoes',
             '/shop/bags',
             '/shop/watches',
             '/shop/clothes',
-          ].indexOf(pathname) + 1 && (
+          ].indexOf(pathname) >= 0 ? (
             <div className="flex items-center hidden md:flex">
               <div className="relative text-gray-600 focus-within:text-gray-400">
                 <form onSubmit={handleSubmit}>
@@ -86,7 +89,7 @@ function Toolbar({ openSideDrawer }) {
                 </form>
               </div>
             </div>
-          )}
+          ) : null}
           <Link
             to="/cart"
             className="py-3 px-4 hover:bg-gray-200 lg:mr-8 flex items-center relative"

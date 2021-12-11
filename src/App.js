@@ -12,6 +12,7 @@ import Contact from './pages/Contact';
 import About from './pages/About';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import Gallery from './pages/Gallery';
 
 import useAuthListener from './hooks/useAuthListener';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -19,6 +20,7 @@ import { useSelector } from 'react-redux';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Orders from './pages/Orders';
 
 function App() {
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false);
@@ -71,6 +73,8 @@ function App() {
 
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/orders" element={<Orders currentUser={currentUser} />} />
       </Routes>
       <Footer />
     </>

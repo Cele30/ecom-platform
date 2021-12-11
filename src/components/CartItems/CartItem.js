@@ -8,6 +8,7 @@ import {
   removeFromCart,
 } from '../../store/cart/cart.slice';
 import { displayMoney } from '../../utils/helpers';
+import { toast } from 'react-toastify';
 
 function CartItem({ item }) {
   const dispatch = useDispatch();
@@ -17,9 +18,13 @@ function CartItem({ item }) {
       <div className="w-8 h-20 flex flex-col items-center">
         <button
           className="w-8 h-full p-2 font-bold border flex items-center justify-center text-gray-700 hover:bg-gray-200"
-          onClick={() =>
-            dispatch(addQtyToItem({ id: item.productId, quantity: 1 }))
-          }
+          onClick={() => {
+            if (item.maxQuantity > item.quantity) {
+              dispatch(addQtyToItem({ id: item.productId, quantity: 1 }));
+            } else {
+              toast.info('Нема повеќе на залиха ');
+            }
+          }}
         >
           <FaPlus />
         </button>
@@ -55,7 +60,7 @@ function CartItem({ item }) {
               <h5 className="text-xs text-black font-bold">{item.quantity}</h5>
             </div>
 
-            <div>
+            {/* <div>
               <span className="text-gray-500 block text-xs mb-1">Size</span>
               <h5 className="text-xs text-black font-bold">28mm</h5>
             </div>
@@ -63,11 +68,11 @@ function CartItem({ item }) {
             <div>
               <span className="text-gray-500 block text-xs mb-1">Color</span>
               <div className="w-3 h-3 rounded-full bg-black"></div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="text-center text-xl">
-          {displayMoney(item.price * item.quantity)}
+          {displayMoney((item.discountPrice || item.price) * item.quantity)}
         </div>
         <button
           className="ml-auto border p-4 text-gray-700 hover:bg-gray-200"

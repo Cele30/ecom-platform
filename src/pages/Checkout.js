@@ -1,13 +1,87 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaAngleLeft, FaTrash } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { initializeApp } from '../store/authentication/authentication.slice';
+import { calculateTotal, displayMoney } from '../utils/helpers';
+import { createOrder, updateQuantityOfItems } from '../services/firebase';
+import { toast } from 'react-toastify';
+import { clearCart } from '../store/cart/cart.slice';
+
+const initialValues = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  address: '',
+  city: '',
+  country: '',
+  postcode: '',
+};
 
 function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [values, setValues] = useState(initialValues);
+  const { items } = useSelector(state => state.cart);
+  const { currentUser } = useSelector(state => state.auth);
+  const navigate = useNavigate();
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardCVV, setCardCVV] = useState('');
+  const [cardDate, setCardDate] = useState('');
+  const dispatch = useDispatch();
 
-  const handleChange = event => setPaymentMethod(event.target.name);
+  const handlePayment = event => setPaymentMethod(event.target.name);
+
+  const handleChange = event => {
+    setValues(prevState => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  const prices = items.map(
+    product => (product.discountPrice || product.price) * product.quantity
+  );
+
+  const handleSubmit = async event => {
+    const isValid =
+      values.firstName !== '' && values.lastName !== '' && values.email !== '';
+
+    event.preventDefault();
+    if (isValid) {
+      const paymentInfo =
+        paymentMethod === 'cash'
+          ? { paymentMethod }
+          : { cardNumber, cardCVV, cardDate };
+
+      const order = {
+        ...values,
+        ...paymentInfo,
+        createdAt: Date.now(),
+        totalPrice: calculateTotal(prices),
+        userId: currentUser.userId,
+        orderItems: items.map(item => ({
+          price: item.discountPrice || item.price,
+          name: item.name,
+          quantity: item.quantity,
+          productId: item.productId,
+        })),
+      };
+
+      await createOrder(order);
+      const orderedItems = items.map(item => ({
+        id: item.productId,
+        quantity: item.quantity,
+        maxQuantity: item.maxQuantity,
+      }));
+      updateQuantityOfItems(orderedItems);
+
+      setValues(initialValues);
+      navigate('/');
+      dispatch(clearCart());
+      toast.success('Би благодариме за вашата нарачка');
+    }
+  };
 
   return (
     <div className="container mx-auto px-4">
@@ -31,12 +105,18 @@ function Checkout() {
                   <input
                     type="text"
                     placeholder="First Name"
+                    name="firstName"
                     className="mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3"
+                    value={values.firstName}
+                    onChange={handleChange}
                   />
                   <input
                     type="text"
                     placeholder="Last Name"
+                    name="lastName"
                     className="mb-4 sm:mb-5 w-full border border-gray-300 rounded px-6 py-3"
+                    value={values.lastName}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -44,43 +124,61 @@ function Checkout() {
                   <input
                     type="email"
                     placeholder="E-mail address"
+                    name="email"
                     className="mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3"
+                    value={values.email}
+                    onChange={handleChange}
                   />
                   <input
                     type="text"
                     placeholder="Phone Number"
+                    name="phone"
                     className="mb-4 sm:mb-5 w-full border border-gray-300 rounded px-6 py-3"
+                    value={values.phone}
+                    onChange={handleChange}
                   />
                 </div>
 
                 <input
                   type="text"
                   placeholder="Address"
+                  name="address"
                   className="mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3"
+                  value={values.address}
+                  onChange={handleChange}
                 />
 
-                <input
+                {/* <input
                   type="text"
                   placeholder="Apartmen, Suite, etc"
                   className="mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3"
-                />
+                /> */}
 
                 <input
                   type="text"
                   placeholder="City"
+                  name="city"
                   className="mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3"
+                  value={values.city}
+                  onChange={handleChange}
                 />
 
                 <div className="flex justify-between">
                   <input
-                    type="email"
+                    type="text"
                     placeholder="Country/Region"
+                    name="country"
                     className="mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3"
+                    value={values.country}
+                    onChange={handleChange}
                   />
                   <input
                     type="text"
                     placeholder="Postcode or ZIP"
+                    name="postcode"
                     className="mb-4 sm:mb-5 w-full border border-gray-300 rounded px-6 py-3"
+                    value={values.postcode}
+                    onChange={handleChange}
                   />
                 </div>
               </form>
@@ -97,7 +195,7 @@ function Checkout() {
                   name="cash"
                   className="hidden"
                   checked={paymentMethod === 'cash'}
-                  onChange={handleChange}
+                  onChange={handlePayment}
                 />
                 <label
                   htmlFor="radio2"
@@ -114,7 +212,7 @@ function Checkout() {
                   name="card"
                   className="hidden"
                   checked={paymentMethod === 'card'}
-                  onChange={handleChange}
+                  onChange={handlePayment}
                 />
                 <label
                   htmlFor="radio1"
@@ -133,6 +231,8 @@ function Checkout() {
                     type="text"
                     placeholder="Enter Card Number"
                     className="mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3"
+                    value={cardNumber}
+                    onChange={event => setCardNumber(event.target.value)}
                   />
 
                   <div className="flex justify-between">
@@ -140,11 +240,15 @@ function Checkout() {
                       type="month"
                       placeholder="Valid Date"
                       className="mb-4 sm:mb-5 mr-2 w-full border border-gray-300 rounded px-6 py-3"
+                      value={cardDate}
+                      onChange={event => setCardDate(event.target.value)}
                     />
                     <input
                       type="text"
                       placeholder="CVV"
                       className="mb-4 sm:mb-5 w-full border border-gray-300 rounded px-6 py-3"
+                      value={cardCVV}
+                      onChange={event => setCardCVV(event.target.value)}
                     />
                   </div>
                 </form>
@@ -159,8 +263,14 @@ function Checkout() {
                 <FaAngleLeft className="text-lg pr-2" />
                 Return to cart
               </Link>
-              <button className="mr-4 inline-block border border-yellow-500 border-1 text-white bg-yellow-500 px-7 py-3 rounded uppercase text-center font-semibold">
-                Pay $200
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="mr-4 inline-block border border-yellow-500 border-1 text-white bg-yellow-500 px-7 py-3 rounded uppercase text-center font-semibold"
+              >
+                {paymentMethod === 'cash'
+                  ? 'Pay'
+                  : `Pay ${displayMoney(calculateTotal(prices))}`}
               </button>
             </div>
           </div>
@@ -173,43 +283,57 @@ function Checkout() {
             </h3>
 
             <div className="mt-5 mb-8">
-              <div className="flex items-center mb-6 group">
-                <div className="w-20 h-20">
-                  <img
-                    src="/assets/images/backpack-03-1.png"
-                    alt="product"
-                    className="w-full h-full object-contain object-center"
-                  />
-                </div>
-                <div className="flex flex-col gap-1 px-2 mr-auto">
-                  <h1 className="font-medium">Jeans with sequins</h1>
-                  <div className="flex gap-4 items-center">
-                    <div className="flex items-center">
-                      <span className="text-gray-400 text-xs mr-1">Size</span>
-                      <h5 className="text-xs text-black">28mm</h5>
-                    </div>
+              {items.map(item => (
+                <div
+                  key={item.productId}
+                  className="flex items-center mb-6 group"
+                >
+                  <div className="w-20 h-20">
+                    <img
+                      src={`/assets/images/products/${item.name.replaceAll(
+                        ' ',
+                        ''
+                      )}/image-1.png`}
+                      alt="product"
+                      className="w-full h-full object-contain object-center"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1 px-2 mr-auto">
+                    <h1 className="font-medium">{item.name}</h1>
+                    {/* <div className="flex gap-4 items-center">
+                      <div className="flex items-center">
+                        <span className="text-gray-400 text-xs mr-1">Size</span>
+                        <h5 className="text-xs text-black">28mm</h5>
+                      </div>
+
+                      <div className="flex items-center">
+                        <span className="text-gray-400 text-xs mr-1">
+                          Color
+                        </span>
+                        <h5 className="text-xs text-black">Blue</h5>
+                      </div>
+                    </div> */}
 
                     <div className="flex items-center">
-                      <span className="text-gray-400 text-xs mr-1">Color</span>
-                      <h5 className="text-xs text-black">Blue</h5>
+                      <p className="mr-2 font-bold text-xl">
+                        ${item.discountPrice || item.price}
+                      </p>
+                      <span className="text-gray-500 text-md">
+                        x {item.quantity}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center">
-                    <p className="mr-2 font-bold text-xl">$39.00</p>
-                    <span className="text-gray-500 text-md">x 01</span>
-                  </div>
+                  {/* <div className="hidden group-hover:block cursor-pointer p-2 hover:bg-gray-200">
+                    <FaTrash />
+                  </div> */}
                 </div>
-
-                <div className="hidden group-hover:block cursor-pointer p-2 hover:bg-gray-200">
-                  <FaTrash />
-                </div>
-              </div>
+              ))}
             </div>
 
             <div className="mb-4 pt-4">
-              <p className="pt-1 pb-2">Cart Total</p>
-              <div className="flex justify-between border-b border-gray-200 pb-1">
+              {/* <p className="pt-1 pb-2">Cart Total</p> */}
+              {/* <div className="flex justify-between border-b border-gray-200 pb-1">
                 <span>Subtotal</span>
                 <span>$236</span>
               </div>
@@ -217,11 +341,11 @@ function Checkout() {
               <div className="flex justify-between border-b border-gray-200 pb-1 pt-2">
                 <span>Coupon applied</span>
                 <span>-$36</span>
-              </div>
+              </div> */}
 
-              <div className="flex justify-between pt-3">
+              <div className="flex justify-between pt-3 text-xl">
                 <span>Total</span>
-                <span>$200</span>
+                <span>{displayMoney(calculateTotal(prices))}</span>
               </div>
             </div>
           </div>

@@ -13,6 +13,8 @@ function ProductDetails() {
   const { product, loading, error } = useProduct(id);
   useScrollTop();
 
+  console.log(product);
+
   return (
     <div className="container mx-auto px-4">
       {loading && (
@@ -32,6 +34,9 @@ function ProductDetails() {
               name={product.name}
               price={product.price}
               active={product.active}
+              maxQuantity={product.maxQuantity}
+              percentage={product.percentage}
+              discountPrice={product.discountPrice}
             />
             <ProductActions product={product} />
             <ProductDescription description={product.description} />

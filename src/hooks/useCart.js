@@ -21,5 +21,13 @@ export default function useCart() {
     }
   };
 
-  return { items, isItemInCart, addToCart, itemQuantity };
+  const buyNow = product => {
+    if (isItemInCart(product.productId)) {
+      return;
+    } else {
+      dispatch(dispatchAddToCart(product));
+    }
+  };
+
+  return { items, isItemInCart, addToCart, itemQuantity, buyNow };
 }
